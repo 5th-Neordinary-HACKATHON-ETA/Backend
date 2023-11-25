@@ -5,8 +5,5 @@ export class CreateAnnouncementDto {
   meetingId!: string;
 
   @IsString()
-  title!: string;
-
-  @IsString()
   content!: string;
 }

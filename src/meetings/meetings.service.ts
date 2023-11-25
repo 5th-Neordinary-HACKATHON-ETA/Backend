@@ -210,6 +210,7 @@ export class MeetingsService {
     for (const team of teams) {
       const meeting = await this.meetingsRepository.find({
         where: { team: team.team },
+        relations: { team: true },
       });
       if (meeting) {
         meetings.push(...meeting);
@@ -229,9 +230,13 @@ export class MeetingsService {
       }
       return 0;
     });
+    const team: Team = await this.teamsRepository.findOne({
+      where: { id: meetings[0].team.id },
+    });
 
     return SuccessResponse(RESPONSE_CODE[2000], {
       mostCurrentMeeting: meetings[0],
+      numUsers: team.maxMember,
     });
   }
 }

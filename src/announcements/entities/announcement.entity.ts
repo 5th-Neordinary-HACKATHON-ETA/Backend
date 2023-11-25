@@ -26,9 +26,5 @@ export class Announcement {
 
   @Column()
   @IsString()
-  title!: string;
-
-  @Column()
-  @IsString()
   content!: string;
 }

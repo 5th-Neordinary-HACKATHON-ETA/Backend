@@ -41,7 +41,6 @@ export class AnnouncementsService {
     const announcement = new Announcement();
     announcement.writer = user;
     announcement.content = createAnnouncementDto.content;
-    announcement.title = createAnnouncementDto.title;
     announcement.meeting = meeting;
     await this.announcementRepository.save(announcement);
     meeting.announcement = announcement;
@@ -51,7 +50,6 @@ export class AnnouncementsService {
   async getAnnouncements(user: User): Promise<
     {
       teamName: string;
-      title: string | null;
       nickname: string | null;
     }[]
   > {
