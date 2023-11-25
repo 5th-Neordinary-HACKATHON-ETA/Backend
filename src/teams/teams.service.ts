@@ -25,14 +25,23 @@ export class TeamsService {
     this.teamRepository.save(team);
   }
 
-  async editTeam(teamId: string, editTeamDto: EditTeamDto): Promise<void> {
+  async editTeam(
+    user: User,
+    teamId: string,
+    editTeamDto: EditTeamDto,
+  ): Promise<void> {
     const team = await this.teamRepository.findOne({
       where: {
         id: teamId,
       },
+      relations: ['boss'],
     });
+    console.dir(user);
     if (team === null) {
       throw new Exception(RESPONSE_CODE[4040], null);
+    }
+    if (team.boss.id !== user.id) {
+      throw new Exception(RESPONSE_CODE[4030], null);
     }
     team.name = editTeamDto.name || team.name;
     team.maxMember = editTeamDto.maxMember || team.maxMember;

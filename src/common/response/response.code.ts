@@ -17,6 +17,11 @@ export const RESPONSE_CODE: Record<number, ResponseCode> = {
     message: 'Validation 실패',
     status: HttpStatus.BAD_REQUEST,
   },
+  4030: {
+    code: 4030,
+    message: '요청을 준 유저는 방장이 아닙니다.',
+    status: HttpStatus.FORBIDDEN,
+  },
   4040: {
     code: 4040,
     message: '존재하지 않는 팀입니다.',
