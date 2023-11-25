@@ -5,9 +5,10 @@ import { ValidationError } from 'class-validator';
 import { Exception } from './common/response/exception';
 import { ExceptionHandler } from './common/response/exception.handler';
 import { RESPONSE_CODE } from './common/response/response.code';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (errors: ValidationError[]) => {
@@ -19,4 +20,5 @@ async function bootstrap() {
   app.useGlobalFilters(new ExceptionHandler());
   await app.listen(3000);
 }
+
 bootstrap();
