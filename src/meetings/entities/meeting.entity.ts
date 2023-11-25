@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsString } from 'class-validator';
 import { Announcement } from '../../announcements/entities/announcement.entity';
 import { Possible_Time } from '../../relationentities/possible_time.entity';
 
@@ -19,8 +19,8 @@ export class Meeting {
   @IsString()
   name!: string;
 
-  @Column()
-  @IsDate()
+  @Column({ nullable: true })
+  @IsDateString()
   dateTime?: Date;
 
   @Column()
