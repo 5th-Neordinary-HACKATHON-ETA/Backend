@@ -12,8 +12,6 @@ export class UsersService {
 
   async deleteAccount() {
     const user: User = new User();
-    user.nickname = 'test';
-    user.email = 'sdf@sf.com';
     user.password = '1234';
     await this.usersRepository.save(user);
   }

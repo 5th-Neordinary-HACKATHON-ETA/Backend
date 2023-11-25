@@ -4,6 +4,10 @@ import { ConfigModule } from '@nestjs/config';
 import { generateTypeOrmConfig } from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { RelationentitiesModule } from './relationentities/relationentities.module';
+import { TeamsModule } from './teams/teams.module';
+import { MeetingsModule } from './meetings/meetings.module';
+import { AnnouncementsModule } from './announcements/announcements.module';
 
 @Module({
   imports: [
@@ -19,6 +23,10 @@ import { UsersModule } from './users/users.module';
     }),
     TypeOrmModule.forRoot(generateTypeOrmConfig(process.env)),
     UsersModule,
+    TeamsModule,
+    RelationentitiesModule,
+    MeetingsModule,
+    AnnouncementsModule,
   ],
   controllers: [],
   providers: [],
