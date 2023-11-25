@@ -8,6 +8,7 @@ import { RelationentitiesModule } from './relationentities/relationentities.modu
 import { TeamsModule } from './teams/teams.module';
 import { MeetingsModule } from './meetings/meetings.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AnnouncementsModule } from './announcements/announcements.module';
     RelationentitiesModule,
     MeetingsModule,
     AnnouncementsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
