@@ -8,6 +8,7 @@ import {
 import { IsDate, IsNumber, IsString } from 'class-validator';
 import { Participant } from '../../relationentities/participant.entity';
 import { User } from '../../users/entities/users.entity';
+import { Meeting } from '../../meetings/entities/meeting.entity';
 
 @Entity()
 export class Team {
@@ -37,4 +38,9 @@ export class Team {
     nullable: true,
   })
   participants: Participant[];
+
+  @OneToMany((type) => Meeting, (meetings) => meetings, {
+    nullable: true,
+  })
+  meetings: Meeting[];
 }

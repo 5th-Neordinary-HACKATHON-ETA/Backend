@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -9,6 +10,7 @@ import {
 import { IsDateString, IsNumber, IsString } from 'class-validator';
 import { Announcement } from '../../announcements/entities/announcement.entity';
 import { Possible_Time } from '../../relationentities/possible_time.entity';
+import { Team } from '../../teams/entities/team.entity';
 
 @Entity()
 export class Meeting {
@@ -37,4 +39,7 @@ export class Meeting {
 
   @OneToMany((type) => Possible_Time, (possibleTime) => possibleTime)
   possibleTimes?: Possible_Time[];
+
+  @ManyToOne((type) => Team, (team) => team.meetings)
+  team!: Team;
 }
