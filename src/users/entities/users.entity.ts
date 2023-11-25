@@ -1,52 +1,35 @@
-import { InternalServerErrorException } from '@nestjs/common';
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { IsEmail, IsString, Matches } from 'class-validator';
-import * as bcrypt from 'bcrypt';
+import { Column, Entity, OneToMany, PrimaryColumn, Unique } from 'typeorm';
+import { IsString } from 'class-validator';
+import { Participant } from '../../relationentities/participant.entity';
+import { Announcement } from '../../announcements/entities/announcement.entity';
+import { Possible_Time } from '../../relationentities/possible_time.entity';
 
 @Entity()
+@Unique(['nickname'])
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id!: number;
+  @PrimaryColumn()
+  id!: string;
 
   @Column()
   @IsString()
   nickname!: string;
 
-  @Column({ unique: true })
-  @IsEmail()
-  email!: string;
-
   @Column({ select: false })
   @IsString()
-  @Matches(/^(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, {
-    message:
-      'Password must be at least 8 characters(en) long, contain 1 number',
-  })
+  //@Matches(/^(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, {
+  //  message:
+  //    'Password must be at least 8 characters(en) long, contain 1 number',
+  //})
   password!: string;
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword(): Promise<void> {
-    if (this.password) {
-      try {
-        this.password = await bcrypt.hash(this.password, 10);
-      } catch (e) {
-        throw new InternalServerErrorException();
-      }
-    }
-  }
+  @OneToMany((type) => Participant, (participant) => participant, {
+    nullable: true,
+  })
+  participants: Participant[];
 
-  async checkPassword(plainPassword: string): Promise<boolean> {
-    try {
-      return await bcrypt.compare(plainPassword, this.password);
-    } catch (e) {
-      throw new InternalServerErrorException();
-    }
-  }
+  @OneToMany((type) => Announcement, (announcement) => announcement.writer)
+  announcements: Announcement[];
+
+  @OneToMany((type) => Possible_Time, (possibleTime) => possibleTime)
+  possibleTimes: Possible_Time[];
 }
