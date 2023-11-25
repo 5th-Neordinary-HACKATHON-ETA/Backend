@@ -17,6 +17,11 @@ export const RESPONSE_CODE: Record<number, ResponseCode> = {
     message: 'Validation 실패',
     status: HttpStatus.BAD_REQUEST,
   },
+  4040: {
+    code: 4040,
+    message: '존재하지 않는 팀입니다.',
+    status: HttpStatus.NOT_FOUND,
+  },
   5000: {
     code: 5000,
     message: '서버 에러',
