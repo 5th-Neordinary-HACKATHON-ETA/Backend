@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { ResponseBody, SuccessResponse } from 'src/common/response/response';
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dtos/create-team.dto';
 import { RESPONSE_CODE } from 'src/common/response/response.code';
-import { JwtAuthGuard } from '../common/decorator/auth/jwt/jwt.guard';
-import { AuthUser } from '../auth/auth-user.decorator';
-import { User } from '../users/entities/users.entity';
+import { EditTeamDto } from './dtos/edit-team.dto copy';
+import { AuthUser } from 'src/auth/auth-user.decorator';
+import { User } from 'src/users/entities/users.entity';
+import { JwtAuthGuard } from 'src/common/decorator/auth/jwt/jwt.guard';
+
 
 @Controller('team')
 export class TeamsController {
@@ -13,10 +15,24 @@ export class TeamsController {
 
   /* 팀 생성하기 */
   @Post()
+  @UseGuards(JwtAuthGuard)
   async createTeam(
+    @AuthUser() user: User,
     @Body() createTeamDto: CreateTeamDto,
   ): Promise<ResponseBody> {
     await this.teamsService.createTeam(createTeamDto, null);
+    return SuccessResponse(RESPONSE_CODE[2000], null);
+  }
+
+  /* 팀 수정하기 */
+  @Put('/:teamId')
+  @UseGuards(JwtAuthGuard)
+  async editTeam(
+    @AuthUser() user: User,
+    @Body() editTeamDto: EditTeamDto,
+    @Param('teamId') teamId: string,
+  ): Promise<ResponseBody> {
+    await this.teamsService.editTeam(user, teamId, editTeamDto);
     return SuccessResponse(RESPONSE_CODE[2000], null);
   }
 

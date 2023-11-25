@@ -5,6 +5,9 @@ import { Team } from './entities/team.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/users.entity';
 import { Participant } from '../relationentities/participant.entity';
+import { EditTeamDto } from './dtos/edit-team.dto copy';
+import { Exception } from 'src/common/response/exception';
+import { RESPONSE_CODE } from 'src/common/response/response.code';
 
 @Injectable()
 export class TeamsService {
@@ -33,5 +36,31 @@ export class TeamsService {
       relations: ['team'],
     });
     return participants.map((participants) => participants.team);
+  }
+
+  /* 팀 수정하기 */
+  async editTeam(
+    user: User,
+    teamId: string,
+    editTeamDto: EditTeamDto,
+  ): Promise<void> {
+    const team = await this.teamRepository.findOne({
+      where: {
+        id: teamId,
+      },
+      relations: ['boss'],
+    });
+    console.dir(user);
+    if (team === null) {
+      throw new Exception(RESPONSE_CODE[4040], null);
+    }
+    if (team.boss.id !== user.id) {
+      throw new Exception(RESPONSE_CODE[4030], null);
+    }
+    team.name = editTeamDto.name || team.name;
+    team.maxMember = editTeamDto.maxMember || team.maxMember;
+    team.startedAt = editTeamDto.startedAt || team.startedAt;
+    team.endedAt = editTeamDto.endedAt || team.endedAt;
+    await this.teamRepository.save(team);
   }
 }
