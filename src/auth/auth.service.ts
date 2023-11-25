@@ -22,10 +22,10 @@ export class AuthService {
   async join(joinDto: JoinDto): Promise<ResponseBody> {
     if (
       await this.usersRepository.findOne({
-        where: [{ id: joinDto.id }, { nickname: joinDto.nickname }],
+        where: { id: joinDto.id },
       })
     ) {
-      throw new Exception(RESPONSE_CODE[4090], null);
+      throw new Exception(RESPONSE_CODE[14090], null);
     }
 
     const userInDto: User = this.usersRepository.create(joinDto);
@@ -41,7 +41,7 @@ export class AuthService {
       },
     });
     if (!userData) {
-      throw new Exception(RESPONSE_CODE[4040], null);
+      throw new Exception(RESPONSE_CODE[14040], null);
     }
 
     const payload: Payload = {
@@ -53,5 +53,17 @@ export class AuthService {
     const sign = this.jwtService.sign(payload);
     response.header('Authorization', 'Bearer ' + sign);
     return SuccessResponse(RESPONSE_CODE[2000], { id: userData.id });
+  }
+
+  async duplicate(id: string): Promise<ResponseBody> {
+    let isDuplicate = false;
+    if (
+      await this.usersRepository.findOne({
+        where: { id: id },
+      })
+    ) {
+      isDuplicate = true;
+    }
+    return SuccessResponse(RESPONSE_CODE[2000], { isDuplicate: isDuplicate });
   }
 }
