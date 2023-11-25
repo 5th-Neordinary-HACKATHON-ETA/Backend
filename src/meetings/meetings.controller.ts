@@ -48,4 +48,10 @@ export class MeetingsController {
   ): Promise<ResponseBody> {
     return await this.meetingService.available(availableDto, user);
   }
+
+  @Get('/most-current')
+  @UseGuards(JwtAuthGuard)
+  async mostCurrent(@AuthUser() user: User): Promise<ResponseBody> {
+    return await this.meetingService.mostCurrent(user);
+  }
 }

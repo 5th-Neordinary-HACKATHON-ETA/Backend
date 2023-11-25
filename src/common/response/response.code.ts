@@ -77,6 +77,16 @@ export const RESPONSE_CODE: Record<number, ResponseCode> = {
   },
 
   //MEETING
+  32001: {
+    code: 32001,
+    message: '참여 중인 팀이 없습니다.',
+    status: HttpStatus.OK,
+  },
+  32002: {
+    code: 32002,
+    message: '참여 중인 회의가 없습니다.',
+    status: HttpStatus.OK,
+  },
   34040: {
     code: 34040,
     message: '존재하지 않는 회의입니다.',

@@ -196,4 +196,42 @@ export class MeetingsService {
 
     return SuccessResponse(RESPONSE_CODE[2000], { possibleTimes: uniqueDates });
   }
+
+  async mostCurrent(user: User): Promise<ResponseBody> {
+    const teams = await this.participantsRepository.find({
+      where: { user: user },
+      relations: { team: true },
+    });
+    if (!teams || teams.length === 0) {
+      return SuccessResponse(RESPONSE_CODE[32001], null);
+    }
+
+    const meetings: Meeting[] = [];
+    for (const team of teams) {
+      const meeting = await this.meetingsRepository.find({
+        where: { team: team.team },
+      });
+      if (meeting) {
+        meetings.push(...meeting);
+      }
+    }
+
+    if (meetings.length === 0) {
+      return SuccessResponse(RESPONSE_CODE[32002], null);
+    }
+
+    meetings.sort((a, b) => {
+      if (a.dateTime < b.dateTime) {
+        return -1;
+      }
+      if (a.dateTime > b.dateTime) {
+        return 1;
+      }
+      return 0;
+    });
+
+    return SuccessResponse(RESPONSE_CODE[2000], {
+      mostCurrentMeeting: meetings[0],
+    });
+  }
 }
