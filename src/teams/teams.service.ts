@@ -67,4 +67,29 @@ export class TeamsService {
     team.endedAt = editTeamDto.endedAt || team.endedAt;
     await this.teamRepository.save(team);
   }
+
+  /* 팀 참여하기 */
+  async joinTeam(user: User, teamId: string): Promise<void> {
+    const team = await this.teamRepository.findOne({
+      where: {
+        id: teamId,
+      },
+    });
+    if (team === null) {
+      throw new Exception(RESPONSE_CODE[4040], null);
+    }
+    const participant = await this.participantRepository.findOne({
+      where: {
+        user: { id: user.id },
+        team: { id: team.id },
+      },
+    });
+    if (participant !== null) {
+      throw new Exception(RESPONSE_CODE[24090], null);
+    }
+    const newParticipant = new Participant();
+    newParticipant.team = team;
+    newParticipant.user = user;
+    await this.participantRepository.save(newParticipant);
+  }
 }

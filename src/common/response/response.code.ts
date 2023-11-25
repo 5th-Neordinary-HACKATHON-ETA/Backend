@@ -60,6 +60,11 @@ export const RESPONSE_CODE: Record<number, ResponseCode> = {
     message: '존재하지 않는 팀입니다.',
     status: HttpStatus.NOT_FOUND,
   },
+  24090: {
+    code: 24090,
+    message: '이미 참여한 유저입니다.',
+    status: HttpStatus.CONFLICT,
+  },
 
   //MEETING
   34040: {
