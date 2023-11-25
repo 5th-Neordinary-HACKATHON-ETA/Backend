@@ -52,4 +52,15 @@ export class TeamsController {
       teams,
     });
   }
+
+  /* 팀 참가하기 */
+  @Put('/:teamId/join')
+  @UseGuards(JwtAuthGuard)
+  async joinTeam(
+    @AuthUser() user: User,
+    @Param('teamId') teamId: string,
+  ): Promise<ResponseBody> {
+    await this.teamsService.joinTeam(user, teamId);
+    return SuccessResponse(RESPONSE_CODE[2000], null);
+  }
 }
