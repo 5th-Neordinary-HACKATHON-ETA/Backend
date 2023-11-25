@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
@@ -13,6 +9,7 @@ import { ResponseBody, SuccessResponse } from '../common/response/response';
 import { RESPONSE_CODE } from '../common/response/response.code';
 import { JoinDto } from './dtos/request/join.dto';
 import { LoginDto } from './dtos/request/login.dto';
+import { Exception } from '../common/response/exception';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +25,7 @@ export class AuthService {
         where: [{ id: joinDto.id }, { nickname: joinDto.nickname }],
       })
     ) {
-      throw new UnauthorizedException('user already exists.');
+      throw new Exception(RESPONSE_CODE[4090], null);
     }
 
     const userInDto: User = this.usersRepository.create(joinDto);
@@ -38,11 +35,13 @@ export class AuthService {
 
   async login(loginDto: LoginDto, response: Response): Promise<ResponseBody> {
     const userData = await this.usersRepository.findOne({
-      where: [{ id: loginDto.id }, { password: loginDto.password }],
-      select: { id: true, password: true, nickname: true },
+      where: {
+        id: loginDto.id,
+        password: loginDto.password,
+      },
     });
     if (!userData) {
-      throw new NotFoundException('user not found.');
+      throw new Exception(RESPONSE_CODE[4040], null);
     }
 
     const payload: Payload = {
