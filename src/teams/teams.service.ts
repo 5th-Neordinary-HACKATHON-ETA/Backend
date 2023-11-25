@@ -26,7 +26,11 @@ export class TeamsService {
     team.name = createTeamDto.name;
     team.startedAt = createTeamDto.startedAt;
     team.endedAt = createTeamDto.endedAt;
-    await this.teamRepository.save(team);
+    const participant = new Participant();
+    participant.user = user;
+    participant.team = team; // team 엔티티의 id가 채워짐.
+    await this.teamRepository.save(team); // 팀 생성 정보 저장
+    await this.participantRepository.save(participant); // 팀 참가자 목록에 팀장 정보 저장
   }
 
   /* 팀 조회하기 */
