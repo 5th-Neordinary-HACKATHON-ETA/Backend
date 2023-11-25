@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Get, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Get,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ResponseBody, SuccessResponse } from 'src/common/response/response';
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dtos/create-team.dto';
@@ -7,7 +15,6 @@ import { EditTeamDto } from './dtos/edit-team.dto copy';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { User } from 'src/users/entities/users.entity';
 import { JwtAuthGuard } from 'src/common/decorator/auth/jwt/jwt.guard';
-
 
 @Controller('team')
 export class TeamsController {
