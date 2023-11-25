@@ -29,7 +29,7 @@ export class TeamsService {
   /* 팀 조회하기 */
   async getTeam(user: User): Promise<Team[]> {
     const participants = await this.participantRepository.find({
-      where: { id: user.id },
+      where: { user: { id: user.id } },
       relations: ['team'],
     });
     return participants.map((participants) => participants.team);
