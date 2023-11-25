@@ -6,6 +6,7 @@ import { ResponseBody } from '../common/response/response';
 import { User } from '../users/entities/users.entity';
 import { CreateDto } from './dtos/request/create.dto';
 import { PossibleTimeDto } from './dtos/request/possible-time.dto';
+import { TimeDto } from './dtos/request/time.dto';
 
 @Controller('meetings') //미들웨어라고 보면 됨. domain/teams/ ~~ 로 시작한다고 정해준다.
 export class MeetingsController {
@@ -27,5 +28,14 @@ export class MeetingsController {
     @Body() timeDto: PossibleTimeDto,
   ): Promise<ResponseBody> {
     return await this.meetingService.possibleTime(timeDto, user);
+  }
+
+  @Post('time')
+  @UseGuards(JwtAuthGuard)
+  async time(
+    @AuthUser() user: User,
+    @Body() timeDto: TimeDto,
+  ): Promise<ResponseBody> {
+    return await this.meetingService.time(timeDto, user);
   }
 }

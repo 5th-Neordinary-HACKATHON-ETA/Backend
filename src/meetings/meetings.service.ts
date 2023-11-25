@@ -11,6 +11,7 @@ import { Team } from '../teams/entities/team.entity';
 import { Exception } from '../common/response/exception';
 import { PossibleTimeDto } from './dtos/request/possible-time.dto';
 import { User } from '../users/entities/users.entity';
+import { TimeDto } from './dtos/request/time.dto';
 
 @Injectable()
 export class MeetingsService {
@@ -96,6 +97,41 @@ export class MeetingsService {
       possible_time.possibleTime = timeDto.date;
       await this.possible_timesRepository.save(possible_time);
     }
+    return SuccessResponse(RESPONSE_CODE[2000], null);
+  }
+
+  async time(timeDto: TimeDto, user: User): Promise<ResponseBody> {
+    const meeting: Meeting = await this.meetingsRepository.findOne({
+      where: { id: timeDto.meetId },
+      relations: {
+        team: true,
+      },
+    });
+
+    if (!meeting) {
+      throw new Exception(RESPONSE_CODE[34040], null);
+    }
+
+    const participant: Participant = await this.participantsRepository.findOne({
+      where: { team: meeting.team, user: user },
+    });
+
+    if (!participant) {
+      throw new Exception(RESPONSE_CODE[24030], null);
+    }
+
+    const team: Team = await this.teamsRepository.findOne({
+      where: { id: meeting.team.id },
+      relations: {
+        boss: true,
+      },
+    });
+    if (team.boss.id !== user.id) {
+      throw new Exception(RESPONSE_CODE[24031], null);
+    }
+
+    meeting.dateTime = timeDto.date;
+    await this.meetingsRepository.save(meeting);
     return SuccessResponse(RESPONSE_CODE[2000], null);
   }
 }
