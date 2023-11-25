@@ -13,10 +13,12 @@ export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async createTeam(
+    @AuthUser() user: User,
     @Body() createTeamDto: CreateTeamDto,
   ): Promise<ResponseBody> {
-    this.teamsService.createTeam(createTeamDto, null);
+    this.teamsService.createTeam(createTeamDto, user);
     return SuccessResponse(RESPONSE_CODE[2000], null);
   }
 
