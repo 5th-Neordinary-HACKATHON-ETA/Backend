@@ -31,7 +31,7 @@ export class MeetingsController {
     return await this.meetingService.possibleTime(timeDto, user);
   }
 
-  @Post('time')
+  @Post('/time')
   @UseGuards(JwtAuthGuard)
   async time(
     @AuthUser() user: User,
