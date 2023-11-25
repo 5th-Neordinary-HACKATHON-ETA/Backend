@@ -37,7 +37,7 @@ export class Meeting {
   @JoinColumn()
   announcement?: Announcement;
 
-  @OneToMany((type) => Possible_Time, (possibleTime) => possibleTime)
+  @OneToMany((type) => Possible_Time, (possibleTime) => possibleTime.meeting)
   possibleTimes?: Possible_Time[];
 
   @ManyToOne((type) => Team, (team) => team.meetings)

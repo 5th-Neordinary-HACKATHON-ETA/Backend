@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateTeamDto } from './dtos/create-team.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Team } from './entities/team.entity';
-import { Repository } from 'typeorm';
+import { IsNull, LessThan, MoreThan, Not, Repository } from 'typeorm';
 import { User } from 'src/users/entities/users.entity';
 import { Participant } from '../relationentities/participant.entity';
 import { EditTeamDto } from './dtos/edit-team.dto copy';
 import { Exception } from 'src/common/response/exception';
 import { RESPONSE_CODE } from 'src/common/response/response.code';
+import { Meeting } from '../meetings/entities/meeting.entity';
 
 @Injectable()
 export class TeamsService {
@@ -16,6 +17,8 @@ export class TeamsService {
     private readonly participantRepository: Repository<Participant>,
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
+    @InjectRepository(Meeting)
+    private meetingsRepository: Repository<Meeting>,
   ) {}
 
   /* 팀 생성하기 */
@@ -66,5 +69,38 @@ export class TeamsService {
     team.startedAt = editTeamDto.startedAt || team.startedAt;
     team.endedAt = editTeamDto.endedAt || team.endedAt;
     await this.teamRepository.save(team);
+  }
+
+  /* 팀 메인 화면 조회 */
+  async getTeamMain(teamId: string): Promise<any> {
+    // 최신 회의
+    const meeting = await this.meetingsRepository.findOne({
+      where: [
+        {
+          dateTime: IsNull(),
+          team: { id: teamId },
+        },
+        {
+          dateTime: MoreThan(new Date()),
+          team: { id: teamId },
+        },
+      ],
+      relations: ['team', 'possibleTimes'],
+    });
+    // 공지사항, 지난 회의 3개
+    const previously = await this.meetingsRepository
+      .createQueryBuilder('meeting')
+      .where('meeting.dateTime < :currentDate', { currentDate: new Date() })
+      .andWhere('meeting.dateTime IS NOT NULL')
+      .andWhere('meeting.teamId = :teamId', { teamId })
+      .orderBy('meeting.dateTime', 'DESC')
+      .take(3)
+      .leftJoinAndSelect('meeting.team', 'team')
+      .leftJoinAndSelect('meeting.announcement', 'announcement')
+      .getMany();
+    return {
+      previously,
+      meeting,
+    };
   }
 }
