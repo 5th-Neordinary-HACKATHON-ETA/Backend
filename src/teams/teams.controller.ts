@@ -20,7 +20,7 @@ export class TeamsController {
     @AuthUser() user: User,
     @Body() createTeamDto: CreateTeamDto,
   ): Promise<ResponseBody> {
-    await this.teamsService.createTeam(createTeamDto, null);
+    await this.teamsService.createTeam(createTeamDto, user);
     return SuccessResponse(RESPONSE_CODE[2000], null);
   }
 
