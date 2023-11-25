@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { JwtAuthGuard } from 'src/common/decorator/auth/jwt/jwt.guard';
 import { AuthUser } from 'src/auth/auth-user.decorator';
@@ -22,5 +22,15 @@ export class AnnouncementsController {
       createAnnouncementDto,
     );
     return SuccessResponse(RESPONSE_CODE[2000], null);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getAnnouncements(@AuthUser() user: User): Promise<ResponseBody> {
+    const announcements =
+      await this.announcementsService.getAnnouncements(user);
+    return SuccessResponse(RESPONSE_CODE[2000], {
+      announcements,
+    });
   }
 }

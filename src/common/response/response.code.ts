@@ -55,10 +55,25 @@ export const RESPONSE_CODE: Record<number, ResponseCode> = {
   },
 
   //TEAM
+  24030: {
+    code: 24031,
+    message: '해당 팀에 가입되어 있지 않습니다.',
+    status: HttpStatus.FORBIDDEN,
+  },
+  24031: {
+    code: 24031,
+    message: '해당 팀의 방장이 아닙니다.',
+    status: HttpStatus.FORBIDDEN,
+  },
   24040: {
     code: 24040,
     message: '존재하지 않는 팀입니다.',
     status: HttpStatus.NOT_FOUND,
+  },
+  24090: {
+    code: 24090,
+    message: '이미 참여한 유저입니다.',
+    status: HttpStatus.CONFLICT,
   },
 
   //MEETING
