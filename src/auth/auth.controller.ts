@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { JoinDto } from './dtos/request/join.dto';
@@ -21,6 +29,11 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<ResponseBody> {
     return await this.authService.login(loginDto, response);
+  }
+
+  @Get('duplicate')
+  async duplicate(@Query('compareId') id: string): Promise<ResponseBody> {
+    return await this.authService.duplicate(id);
   }
 
   //@Post('test')
