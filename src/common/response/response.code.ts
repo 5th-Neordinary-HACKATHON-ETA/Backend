@@ -32,4 +32,14 @@ export const RESPONSE_CODE: Record<number, ResponseCode> = {
     message: '서버 에러',
     status: HttpStatus.INTERNAL_SERVER_ERROR,
   },
+  4040: {
+    code: 4040,
+    message: '유저 정보가 존재하지 않습니다.',
+    status: HttpStatus.NOT_FOUND,
+  },
+  4090: {
+    code: 4090,
+    message: '이미 존재하는 유저입니다.',
+    status: HttpStatus.CONFLICT,
+  },
 };
