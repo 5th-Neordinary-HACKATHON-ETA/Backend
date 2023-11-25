@@ -85,7 +85,7 @@ export class TeamsService {
           team: { id: teamId },
         },
       ],
-      relations: ['team', 'possibleTimes'],
+      relations: ['team', 'possibleTimes', 'possibleTimes.user'],
     });
     // 공지사항, 지난 회의 3개
     const previously = await this.meetingsRepository
