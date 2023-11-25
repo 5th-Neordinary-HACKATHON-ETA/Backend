@@ -27,8 +27,11 @@ export class TeamsController {
     @AuthUser() user: User,
     @Body() createTeamDto: CreateTeamDto,
   ): Promise<ResponseBody> {
-    await this.teamsService.createTeam(createTeamDto, user);
-    return SuccessResponse(RESPONSE_CODE[2000], null);
+    const teamId: string = await this.teamsService.createTeam(
+      createTeamDto,
+      user,
+    );
+    return SuccessResponse(RESPONSE_CODE[2000], { teamId: teamId });
   }
 
   /* 팀 수정하기 */

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTeamDto } from './dtos/create-team.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Team } from './entities/team.entity';
-import { IsNull, LessThan, MoreThan, Not, Repository } from 'typeorm';
+import { IsNull, MoreThan, Repository } from 'typeorm';
 import { User } from 'src/users/entities/users.entity';
 import { Participant } from '../relationentities/participant.entity';
 import { EditTeamDto } from './dtos/edit-team.dto copy';
@@ -22,7 +22,7 @@ export class TeamsService {
   ) {}
 
   /* 팀 생성하기 */
-  async createTeam(createTeamDto: CreateTeamDto, user: User): Promise<void> {
+  async createTeam(createTeamDto: CreateTeamDto, user: User): Promise<string> {
     const team = new Team();
     team.boss = user;
     team.maxMember = createTeamDto.maxMember;
@@ -34,6 +34,7 @@ export class TeamsService {
     participant.team = team; // team 엔티티의 id가 채워짐.
     await this.teamRepository.save(team); // 팀 생성 정보 저장
     await this.participantRepository.save(participant); // 팀 참가자 목록에 팀장 정보 저장
+    return team.id;
   }
 
   /* 팀 조회하기 */
