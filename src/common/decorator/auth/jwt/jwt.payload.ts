@@ -1,5 +1,5 @@
 export class Payload {
-  username!: string;
+  userId!: string;
   period!: string;
   sub!: string;
 }
