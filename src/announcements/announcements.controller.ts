@@ -7,7 +7,7 @@ import { CreateAnnouncementDto } from './dtos/create-announcement.dto';
 import { ResponseBody, SuccessResponse } from 'src/common/response/response';
 import { RESPONSE_CODE } from 'src/common/response/response.code';
 
-@Controller('announcement')
+@Controller('announcements')
 export class AnnouncementsController {
   constructor(private readonly announcementsService: AnnouncementsService) {}
 

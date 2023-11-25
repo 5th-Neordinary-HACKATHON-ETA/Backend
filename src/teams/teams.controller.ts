@@ -1,8 +1,8 @@
 import {
   Body,
   Controller,
-  Param,
   Get,
+  Param,
   Post,
   Put,
   UseGuards,
@@ -16,7 +16,7 @@ import { AuthUser } from 'src/auth/auth-user.decorator';
 import { User } from 'src/users/entities/users.entity';
 import { JwtAuthGuard } from 'src/common/decorator/auth/jwt/jwt.guard';
 
-@Controller('team')
+@Controller('teams')
 export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
