@@ -8,6 +8,9 @@ import { TeamsModule } from './teams/teams.module';
 import { MeetingsModule } from './meetings/meetings.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerBehindProxyGuard } from './common/throttler-behind-proxy.guard';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -21,6 +24,10 @@ import { AuthModule } from './auth/auth.module';
             : '.env.test',
       validationSchema,
     }),
+    ThrottlerModule.forRoot({
+      ttl: 1,
+      limit: 10,
+    }),
     TypeOrmModule.forRoot(generateTypeOrmConfig(process.env)),
     TeamsModule,
     RelationentitiesModule,
@@ -29,6 +36,11 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerBehindProxyGuard,
+    },
+  ],
 })
 export class AppModule {}
