@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { MeetingsService } from './meetings.service';
 import { JwtAuthGuard } from '../common/decorator/auth/jwt/jwt.guard';
 import { AuthUser } from '../auth/auth-user.decorator';
@@ -7,6 +7,7 @@ import { User } from '../users/entities/users.entity';
 import { CreateDto } from './dtos/request/create.dto';
 import { PossibleTimeDto } from './dtos/request/possible-time.dto';
 import { TimeDto } from './dtos/request/time.dto';
+import { AvailableDto } from './dtos/request/available.dto';
 
 @Controller('meetings') //미들웨어라고 보면 됨. domain/teams/ ~~ 로 시작한다고 정해준다.
 export class MeetingsController {
@@ -37,5 +38,14 @@ export class MeetingsController {
     @Body() timeDto: TimeDto,
   ): Promise<ResponseBody> {
     return await this.meetingService.time(timeDto, user);
+  }
+
+  @Get('/available')
+  @UseGuards(JwtAuthGuard)
+  async available(
+    @AuthUser() user: User,
+    @Body() availableDto: AvailableDto,
+  ): Promise<ResponseBody> {
+    return await this.meetingService.available(availableDto, user);
   }
 }

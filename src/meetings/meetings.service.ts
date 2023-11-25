@@ -12,6 +12,7 @@ import { Exception } from '../common/response/exception';
 import { PossibleTimeDto } from './dtos/request/possible-time.dto';
 import { User } from '../users/entities/users.entity';
 import { TimeDto } from './dtos/request/time.dto';
+import { AvailableDto } from './dtos/request/available.dto';
 
 @Injectable()
 export class MeetingsService {
@@ -133,5 +134,66 @@ export class MeetingsService {
     meeting.dateTime = timeDto.date;
     await this.meetingsRepository.save(meeting);
     return SuccessResponse(RESPONSE_CODE[2000], null);
+  }
+
+  async available(
+    availableDto: AvailableDto,
+    user: User,
+  ): Promise<ResponseBody> {
+    const meeting = await this.meetingsRepository.findOne({
+      where: { id: availableDto.meetId },
+      relations: { team: true },
+    });
+
+    if (!meeting) {
+      throw new Exception(RESPONSE_CODE[34040], null);
+    }
+
+    const participant = await this.participantsRepository.findOne({
+      where: { team: meeting.team, user: user },
+    });
+
+    if (!participant) {
+      throw new Exception(RESPONSE_CODE[24030], null);
+    }
+
+    const team = await this.teamsRepository.findOne({
+      where: { id: meeting.team.id },
+      relations: { boss: true },
+    });
+
+    if (team.boss.id !== user.id) {
+      throw new Exception(RESPONSE_CODE[24031], null);
+    }
+
+    const totalUserNumber = await this.participantsRepository.count({
+      where: { team: team },
+    });
+
+    const possibleTimes = await this.possible_timesRepository.find({
+      where: { meeting: meeting },
+      relations: { user: true },
+    });
+
+    if (!possibleTimes || possibleTimes.length === 0) {
+      throw new Exception(RESPONSE_CODE[34041], null);
+    }
+
+    const possibleTimesMap: Map<string, number> = new Map();
+
+    possibleTimes.forEach((possibleTime) => {
+      const dateString = possibleTime.possibleTime.toDateString();
+      possibleTimesMap.set(
+        dateString,
+        (possibleTimesMap.get(dateString) || 0) + 1,
+      );
+    });
+
+    const uniqueDates = Array.from(possibleTimesMap.keys())
+      .filter((key) => possibleTimesMap.get(key) === totalUserNumber)
+      .map((date) => new Date(date))
+      .sort((a, b) => a.getTime() - b.getTime());
+
+    return SuccessResponse(RESPONSE_CODE[2000], { possibleTimes: uniqueDates });
   }
 }
