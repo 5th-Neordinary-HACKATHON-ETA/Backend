@@ -62,6 +62,16 @@ export const RESPONSE_CODE: Record<number, ResponseCode> = {
   },
 
   //MEETING
+  34040: {
+    code: 34040,
+    message: '존재하지 않는 회의입니다.',
+    status: HttpStatus.NOT_FOUND,
+  },
 
   //ANNOUNCEMENT
+  44090: {
+    code: 44090,
+    message: '이미 공지사항이 존재합니다.',
+    status: HttpStatus.CONFLICT,
+  },
 };
