@@ -1,5 +1,68 @@
-# 협업 규칙
+#  MEETA (ETA)
 
+> What's Your ETA? 대학생을 위한 회의 일정 관리 서비스
+> 
+> 🥉 5th Neordinary Hackathon 3rd Prize 🥉
+> 
+> 주제: 뉴진스 노래 제목에 맞는 서비스 개발
+
+ <br/>
+ 
+![image](https://github.com/5th-Neordinary-HACKATHON-MEETA/Backend/assets/131960164/9634b8f4-b733-4299-a549-85f4dee2ec76)
+
+<br/>
+
+![image](https://github.com/5th-Neordinary-HACKATHON-MEETA/Backend/assets/131960164/4cb86c3d-bf23-45e5-a694-6f8acf85d19f)
+
+<br/>
+
+![image](https://github.com/5th-Neordinary-HACKATHON-MEETA/Backend/assets/131960164/29e8ce08-234b-4a30-bd6e-16e91e3546e7)
+
+<br/>
+
+![image](https://github.com/5th-Neordinary-HACKATHON-MEETA/Backend/assets/131960164/5507283e-bb68-4c4b-9905-cc0e15b57401)
+
+<br/>
+
+![image](https://github.com/5th-Neordinary-HACKATHON-MEETA/Backend/assets/131960164/d2ff0ed6-5336-4e87-aab5-fa1b94c9dbd8)
+
+<br/>
+
+![image](https://github.com/5th-Neordinary-HACKATHON-MEETA/Backend/assets/131960164/5e69a8b4-0338-48ab-8008-f4b6f7d783b9)
+
+
+<h2> 주요 기능 </h2>
+<details>
+  <summary> 👨‍👩‍👧‍👦 팀</summary>
+    1. 팀 생성하기
+    2. 팀원 참여
+</details>
+
+<details>
+  <summary> 🕰️ 회의</summary>
+    1. 회의 생성 (팀장)
+    2. 유저별 회의 가능 시간 설정 (팀원)
+    3. 회의 시간 확정 (팀장)
+    4. 회의 내에 공지사항 생성
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 협업 규칙
+<details>
+    <summary> 커밋 컨벤션</summary>
 archivvonjang님의 [블로그](https://velog.io/@archivvonjang/Git-Commit-Message-Convention) 를 참고하여 정리하였습니다.
 <br/>
 <br/>
@@ -194,3 +257,4 @@ git commit -m "커밋메시지 입력
 🏦	일반 데이터베이스 별 (마이그레이션, 스크립트, 확장명 등)<br/>
 🐳	도커 구성<br/>
 🤝	파일을 병합 할 때
+</details>
